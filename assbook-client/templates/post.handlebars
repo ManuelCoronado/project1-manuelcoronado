@@ -1,0 +1,85 @@
+{{#if image}}
+<img class="card-img-top" src="{{image}}">
+{{/if}}
+
+{{#if title}}
+    <div class="card-body">
+        {{#if title}}
+        <h5 class="card-title">{{title}}</h5>
+        {{/if}}
+        {{#if description}}
+        <p class="card-text">{{description}}</p>
+        {{/if}}
+        {{#if place}}
+        <p class="card-text text-muted"><strong>Address: </strong>{{place}}</p>
+        {{/if}}
+    </div>
+{{else if description}}
+    <div class="card-body">
+        {{#if title}}
+        <h5 class="card-title">{{title}}</h5>
+        {{/if}}
+        {{#if description}}
+        <p class="card-text">{{description}}</p>
+        {{/if}}
+        {{#if place}}
+        <p class="card-text text-muted"><strong>Address: </strong>{{place}}</p>
+        {{/if}}
+    </div>
+{{else if place}}
+    <div class="card-body">
+        {{#if title}}
+        <h5 class="card-title">{{title}}</h5>
+        {{/if}}
+        {{#if description}}
+        <p class="card-text">{{description}}</p>
+        {{/if}}
+        {{#if place}}
+        <p class="card-text text-muted"><strong>Address: </strong>{{place}}</p>
+        {{/if}}
+    </div>
+{{/if}}
+
+<div class="card-footer bg-transparent">
+    <div class="row">
+        <div class="col-auto avatar pl-1 pr-1">
+            <a href="profile.html?id={{creator.id}}">
+                <img src="{{creator.avatar}}" class="rounded-circle">
+            </a>
+        </div>
+        <div class="col">
+            <div class="name">
+                <a href="profile.html?id={{creator.id}}">
+                    {{creator.name}}
+                </a>
+            </div>
+            <div><small class="text-muted">{{date}}</small></div>
+        </div>
+        {{#if mine}}
+        <div class="col-auto">
+            <button class="btn btn-danger mr-3 h-100 delete">Delete</button>
+        </div>
+        {{/if}}
+        
+        <div class="col-auto pt-2">
+            {{#unless vote}}
+            <i class="far fa-thumbs-up text-primary mr-2"></i>
+            {{else if vote.likes}}
+            <i class="far fa-thumbs-up text-primary mr-2"></i>
+            {{else}}
+            <i class="far fa-thumbs-up text-muted mr-2"></i>
+            {{/unless}}
+
+            {{#unless vote}}
+            <i class="far fa-thumbs-down text-danger"></i>
+            {{else unless vote.likes}}
+            <i class="far fa-thumbs-down text-danger"></i>
+            {{else}}
+            <i class="far fa-thumbs-down text-muted"></i>
+            {{/unless}}
+            <div class="mt-1">
+                <small class="text-muted likes">{{totalLikes}} likes</small>
+            </div>
+        </div>
+    </div>
+</div>
