@@ -1,7 +1,7 @@
 import { SERVER } from '../constants';
 import { Http } from './http.class';
 import { IComment } from '../interfaces/icomment';
-import { IPost, ResponsePost, ResponsePosts } from '../interfaces/post.interface';
+import { IPost } from '../interfaces/post.interface';
 import * as moment from 'moment';
 
 const postTemplate = require('../../templates/post.handlebars');
@@ -20,7 +20,7 @@ export class Post implements IPost {
     vote?: { likes: boolean; };
     creator?: import("../interfaces/user.interface").IUser;
     mine?: boolean;
-    constructor(postJSON: IPost){
+    constructor(postJSON: IPost) {
         this.id = postJSON.id;
         this.title = postJSON.title;
         this.description = postJSON.description;
@@ -35,27 +35,28 @@ export class Post implements IPost {
         this.creator = postJSON.creator;
         this.mine = postJSON.mine;
     }
-    static async getAll(): Promise<Post[]>{
-        const resp = await Http.get(`${SERVER}/products`);
+    static async getAll(): Promise<Post[]> {
+        const resp = await Http.get(`${SERVER}/posts/`);
         return resp.posts.map(p => new Post(p));
     }
-    static async get(id: number): Promise<Post>{
-        const resp = await Http.get(`${SERVER}/posts/` + id);
-        return new Post(resp.post);
+    static async get(id: number): Promise<Post> {
+        const resp = await Http.get(`${SERVER}/posts/`);
+        return resp.posts.map(p => p.id == id);
     }
-    async post(): Promise<Post>{
+    async post(): Promise<Post> {
         const resp = await Http.post(`${SERVER}/posts`, this);
         return new Post(resp.post);
     }
-    async delete(): Promise<void>{
+    async delete(): Promise<void> {
         return Http.delete(`${SERVER}/posts/${this.id}`);
     }
-    async getComments(): Promise<IComment[]>{
+    async getComments(): Promise<IComment[]> {
         const resp = await Http.get(`${SERVER}/products`);
         return resp.posts.map(p => new Post(p));
     }
-    async addComment(comment: IComment): Promise<IComment>{
-        const resp = await Http.get(`${SERVER}/products`)
+    async addComment(comment: IComment): Promise<IComment> {
+        const resp = await Http.post(`${SERVER}/posts`, this);
+        return comment; //Fix
     }
 
     async postVote(likes) {
@@ -69,7 +70,7 @@ export class Post implements IPost {
     }
 
     toHTML(): HTMLDivElement {
-        let card = document.createElement('div');
+        const card:HTMLDivElement = document.createElement('div');
         card.classList.add('card', 'mb-4', 'shadow');
         switch (this.mood) {
             case 2:
@@ -88,9 +89,9 @@ export class Post implements IPost {
 
         card.innerHTML = post;
 
-        const like = card.querySelector('i.fa-thumbs-up');
-        const dislike = card.querySelector('i.fa-thumbs-down');
-        const likes = card.querySelector('small.likes');
+        const like: HTMLElement = card.querySelector('i.fa-thumbs-up');
+        const dislike: HTMLElement = card.querySelector('i.fa-thumbs-down');
+        const likes: HTMLElement = card.querySelector('small.likes');
 
         like.addEventListener('click', async () => {
             let total;
@@ -132,6 +133,4 @@ export class Post implements IPost {
 
         return card;
     }
-    }
-
 }

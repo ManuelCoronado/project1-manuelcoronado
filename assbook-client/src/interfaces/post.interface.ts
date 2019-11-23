@@ -17,11 +17,3 @@ export interface IPost {
     creator?: IUser;
     mine?: boolean;
 }
-
-export interface ResponsePosts {
-    p: IPost[]
-}
-
-export interface ResponsePost {
-    post: IPost
-}
