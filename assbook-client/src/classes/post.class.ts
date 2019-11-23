@@ -40,11 +40,20 @@ export class Post implements IPost {
         return resp.posts.map(p => new Post(p));
     }
     static async get(id: number): Promise<Post> {
-        const resp = await Http.get(`${SERVER}/posts/`);
-        return resp.posts.map(p => p.id == id);
+        const resp = await Http.get(`${SERVER}/posts/` + { id });
+        return resp.posts.map(p => p.id === id);
     }
     async post(): Promise<Post> {
         const resp = await Http.post(`${SERVER}/posts`, this);
+        this.id = resp.post.id;
+        this.title = resp.post.title;
+        this.description = resp.post.description;
+        this.mood = resp.post.mood;
+        this.image = resp.post.image;
+        this.lat = resp.post.lat;
+        this.lng = resp.post.lng;
+        this.place = resp.post.place;
+        this.date = resp.post.date;
         return new Post(resp.post);
     }
     async delete(): Promise<void> {
