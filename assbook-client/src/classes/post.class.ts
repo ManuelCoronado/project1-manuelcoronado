@@ -51,11 +51,11 @@ export class Post implements IPost {
         return Http.delete(`${SERVER}/posts/${this.id}`);
     }
     async getComments(): Promise<IComment[]> {
-        const resp = await Http.get(`${SERVER}/products`);
-        return resp.posts.map(p => new Post(p));
+        const resp = await Http.get(`${SERVER}/comments`);
+        return resp.comment.map(p => new Post(p));
     }
     async addComment(comment: IComment): Promise<IComment> {
-        const resp = await Http.post(`${SERVER}/posts`, this);
+        const resp = await Http.post(`${SERVER}/posts/${this.id}/comments`, this);
         return comment; //Fix
     }
 
