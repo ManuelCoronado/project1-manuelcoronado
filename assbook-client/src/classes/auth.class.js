@@ -44,5 +44,22 @@ export class Auth {
             });
         });
     }
+    static checkToken() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield new Promise((res) => {
+                let token = localStorage.getItem("accessToken");
+                if (token === null || token === 'undefined') {
+                    location.assign('login.html');
+                }
+                else {
+                    localStorage.removeItem("accessToken");
+                }
+            });
+        });
+    }
+    static logout() {
+        localStorage.removeItem("accessToken");
+        location.assign('login.html');
+    }
 }
 //# sourceMappingURL=auth.class.js.map

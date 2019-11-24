@@ -8,9 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { Post } from './classes/post.class';
+import { Auth } from './classes/auth.class';
 let newPostForm = null;
 let errorMsg = null;
 let imagePreview = null;
+let logout = null;
 function convertBase64(file) {
     let reader = new FileReader();
     reader.addEventListener('load', () => {
@@ -53,6 +55,7 @@ function validateForm(event) {
     });
 }
 function loadImage(event) {
+    Auth.checkToken();
     let file = event.target.files[0];
     let reader = new FileReader();
     if (file)
@@ -64,6 +67,9 @@ function loadImage(event) {
 window.addEventListener("DOMContentLoaded", e => {
     newPostForm = document.getElementById("newPlace");
     errorMsg = document.getElementById("errorMsg");
+    logout = document.getElementById("logout");
+    logout = document.getElementById("logout");
+    logout.addEventListener("click", Auth.logout());
     newPostForm.image.addEventListener('change', loadImage);
     newPostForm.addEventListener('submit', validateForm);
 });

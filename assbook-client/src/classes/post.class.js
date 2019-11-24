@@ -35,8 +35,12 @@ export class Post {
     }
     static get(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const resp = yield Http.get(`${SERVER}/posts/`);
-            return resp.posts.map(p => p.id == id);
+            const resp = yield Http.post(`${SERVER}/posts/${id}`, this);
+            return resp.posts.map(p => p.id === id).catch(error => {
+                error.status(404)
+                    .send({ ok: false, error: "Post not found " });
+            });
+            ;
         });
     }
     post() {
@@ -61,14 +65,14 @@ export class Post {
     }
     getComments() {
         return __awaiter(this, void 0, void 0, function* () {
-            const resp = yield Http.get(`${SERVER}/comments`);
-            return resp.comment.map(p => new Post(p));
+            const resp = yield Http.get(`${SERVER}/comments/${this.id}`);
+            return resp.comment.map(p => new Post(p)); //FIX
         });
     }
     addComment(comment) {
         return __awaiter(this, void 0, void 0, function* () {
             const resp = yield Http.post(`${SERVER}/posts/${this.id}/comments`, this);
-            return comment; //Fix
+            return; //FIX
         });
     }
     postVote(likes) {

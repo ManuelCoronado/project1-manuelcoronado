@@ -18,31 +18,10 @@ export class User {
         this.avatar = postJSON.avatar;
         this.me = postJSON.me;
     }
-    static getAll() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const resp = yield Http.get(`${SERVER}/user/`);
-            return resp.posts.map(p => new User(p));
-        });
-    }
-    static get(id) {
+    static getProfile(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const resp = yield Http.get(`${SERVER}/user/`);
             return resp.posts.map(p => p.id == id);
-        });
-    }
-    post() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const resp = yield Http.post(`${SERVER}/user`, this);
-            this.id = resp.user.id;
-            this.name = resp.user.name;
-            this.password = resp.user.password;
-            this.avatar = resp.user.avatar;
-            return new User(resp.post);
-        });
-    }
-    delete() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return Http.delete(`${SERVER}/user/${this.id}`);
         });
     }
 }

@@ -31,6 +31,19 @@ export class Auth {
                 .send({ ok: false, error: "Bad Request: " + error });
         });
     }
-    //static async checkToken(): Promise<void>
-    //static logout()
+    
+    static async checkToken(): Promise<void> {
+        await new Promise((res) => {
+            let token = localStorage.getItem("accessToken");
+            if (token === null || token === 'undefined') {
+                location.assign('login.html');
+            } else{
+                localStorage.removeItem("accessToken");
+            }
+        });
+    }
+    static logout(){
+        localStorage.removeItem("accessToken");
+        location.assign('login.html');
+    }
 }

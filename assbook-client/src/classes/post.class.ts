@@ -6,6 +6,7 @@ import * as moment from 'moment';
 
 const postTemplate = require('../../templates/post.handlebars');
 
+
 export class Post implements IPost {
     id: number;
     title?: string;
@@ -40,8 +41,11 @@ export class Post implements IPost {
         return resp.posts.map(p => new Post(p));
     }
     static async get(id: number): Promise<Post> {
-        const resp = await Http.get(`${SERVER}/posts/` + { id });
-        return resp.posts.map(p => p.id === id);
+        const resp = await Http.post(`${SERVER}/posts/${id}`, this);
+        return resp.posts.map(p => p.id === id).catch(error => {
+            error.status(404)
+                .send({ ok: false, error: "Post not found " });
+        });;
     }
     async post(): Promise<Post> {
         const resp = await Http.post(`${SERVER}/posts`, this);
@@ -60,12 +64,12 @@ export class Post implements IPost {
         return Http.delete(`${SERVER}/posts/${this.id}`);
     }
     async getComments(): Promise<IComment[]> {
-        const resp = await Http.get(`${SERVER}/comments`);
-        return resp.comment.map(p => new Post(p));
+        const resp = await Http.get(`${SERVER}/comments/${this.id}`);
+        return resp.comment.map(p => new Post(p)); //FIX
     }
     async addComment(comment: IComment): Promise<IComment> {
         const resp = await Http.post(`${SERVER}/posts/${this.id}/comments`, this);
-        return comment; //Fix
+        return; //FIX
     }
 
     async postVote(likes) {

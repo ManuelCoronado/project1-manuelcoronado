@@ -1,10 +1,12 @@
 import { Post } from './classes/post.class';
 import { mapboxgl } from '../node_modules/mapbox-gl';
 import { MapboxGeocoder} from '@mapbox/mapbox-gl-geocoder';
+import { Auth } from './classes/auth.class';
 
 let newPostForm: HTMLFormElement = null;
 let errorMsg: HTMLDivElement = null;
 let imagePreview: HTMLImageElement = null;
+let logout = null;
 
 function convertBase64(file: File) {
     let reader = new FileReader();
@@ -47,6 +49,7 @@ async function validateForm(event) {
 }
 
 function loadImage(event) {
+    Auth.checkToken();
     let file = event.target.files[0];
     let reader = new FileReader();
 
@@ -60,8 +63,11 @@ function loadImage(event) {
 window.addEventListener("DOMContentLoaded", e => {
     newPostForm = document.getElementById("newPlace") as HTMLFormElement;
     errorMsg = document.getElementById("errorMsg") as HTMLDivElement;
+    logout = document.getElementById("logout") as HTMLLinkElement;
+
+    logout = document.getElementById("logout") as HTMLLinkElement;
+    logout.addEventListener("click", Auth.logout());
 
     newPostForm.image.addEventListener('change', loadImage);
-
     newPostForm.addEventListener('submit', validateForm);
 });

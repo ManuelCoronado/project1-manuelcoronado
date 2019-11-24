@@ -8,9 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { Post } from './classes/post.class';
+import { Auth } from './classes/auth.class';
 let container;
 let search = '';
-let posts = [];
+let posts;
+let logout = null;
 function loadPosts() {
     return __awaiter(this, void 0, void 0, function* () {
         posts = yield Post.getAll();
@@ -29,8 +31,11 @@ function showPosts(posts) {
     });
 }
 window.addEventListener("DOMContentLoaded", e => {
+    Auth.checkToken();
     container = document.getElementById("postContainer");
     loadPosts();
+    logout = document.getElementById("logout");
+    logout.addEventListener("click", Auth.logout());
     document.getElementById("search").addEventListener("keyup", e => {
         search = e.target.value;
         showPosts(posts);
